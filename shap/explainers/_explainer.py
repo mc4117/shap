@@ -256,7 +256,6 @@ class Explainer(Serializable):
         if callable(getattr(self.masker, "feature_names", None)):
             feature_names = [[] for _ in range(len(args))]
 
-        print('used this version')
         rng1 = np.random.RandomState()
 
         i = 0 + rng1.randint(0, 100000, 1)
