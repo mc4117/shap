@@ -1,4 +1,5 @@
 import copy
+import random
 import numpy as np
 import scipy.sparse
 from numba import jit
@@ -49,12 +50,12 @@ class MaskedModel():
 
         self._linearizing_weights = None
 
-    def __call__(self, masks, zero_index=None, batch_size=None):
+    def __call__(self, masks, iter, zero_index=None, batch_size=None):
 
         # if we are passed a 1D array of indexes then we are delta masking and have a special implementation
         if len(masks.shape) == 1:
             if getattr(self.masker, "supports_delta_masking", False):
-                return self._delta_masking_call(masks, zero_index=zero_index, batch_size=batch_size)
+                return self._delta_masking_call(masks, iter, zero_index=zero_index, batch_size=batch_size)
 
             # we need to convert from delta masking to a full masking call because we were given a delta masking
             # input but the masker does not support delta masking
@@ -185,9 +186,10 @@ class MaskedModel():
     #         self._varying_delta_mask_rows.append(np.unique(np.concatenate(varying_rows_set)))
 
 
-    def _delta_masking_call(self, masks, zero_index=None, batch_size=None):
+    def _delta_masking_call(self, masks, iter_mc, zero_index=None, batch_size=None):
         # TODO: we need to do batching here
-
+        print(iter_mc)
+        random.seed(iter_mc[0])
         assert getattr(self.masker, "supports_delta_masking", None) is not None, "Masker must support delta masking!"
 
         masked_inputs, varying_rows = self.masker(masks, *self.args)
@@ -235,7 +237,7 @@ class MaskedModel():
         else:
             return np.where(np.any(self._variants, axis=0))[0]
 
-    def main_effects(self, inds=None, batch_size=None):
+    def main_effects(self, inds=None, iter_mc=None, batch_size=None):
         """ Compute the main effects for this model.
         """
 
@@ -254,7 +256,7 @@ class MaskedModel():
             last_ind = inds[i]
 
         # compute the main effects for the given indexes
-        outputs = self(masks, batch_size=batch_size)
+        outputs = self(masks, iter_mc, batch_size=batch_size)
         main_effects = outputs[1:] - outputs[0]
         
         # expand the vector to the full input size

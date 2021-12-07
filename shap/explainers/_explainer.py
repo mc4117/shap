@@ -2,6 +2,7 @@ import copy
 import time
 import numpy as np
 import scipy as sp
+import random
 from .. import maskers
 from .. import links
 from ..utils import safe_isinstance, show_progress
@@ -254,9 +255,14 @@ class Explainer(Serializable):
         error_std = []
         if callable(getattr(self.masker, "feature_names", None)):
             feature_names = [[] for _ in range(len(args))]
+
+        print('used this version')
+        rng1 = np.random.RandomState()
+
+        i = 0 + rng1.randint(0, 100000, 1)
         for row_args in show_progress(zip(*args), num_rows, self.__class__.__name__+" explainer", silent):
             row_result = self.explain_row(
-                *row_args, max_evals=max_evals, main_effects=main_effects, error_bounds=error_bounds,
+                *row_args, iter = i, max_evals=max_evals, main_effects=main_effects, error_bounds=error_bounds,
                 batch_size=batch_size, outputs=outputs, silent=silent, **kwargs
             )
             values.append(row_result.get("values", None))
@@ -273,6 +279,7 @@ class Explainer(Serializable):
                 row_feature_names = self.masker.feature_names(*row_args)
                 for i in range(len(row_args)):
                     feature_names[i].append(row_feature_names[i])
+            i+=1 + rng1.randint(0, 100000, 1)
 
         # split the values up according to each input
         arg_values = [[] for a in args]
@@ -350,7 +357,7 @@ class Explainer(Serializable):
             ))
         return out[0] if len(out) == 1 else out
 
-    def explain_row(self, *row_args, max_evals, main_effects, error_bounds, outputs, silent, **kwargs):
+    def explain_row(self, *row_args, iter, max_evals, main_effects, error_bounds, outputs, silent, **kwargs):
         """ Explains a single row and returns the tuple (row_values, row_expected_values, row_mask_shapes, main_effects).
 
         This is an abstract method meant to be implemented by each subclass.
@@ -364,7 +371,7 @@ class Explainer(Serializable):
             are fixed inputs present, like labels when explaining the loss), and row_mask_shapes is a list
             of all the input shapes (since the row_values is always flattened),
         """
-        
+
         return {}
 
     @staticmethod

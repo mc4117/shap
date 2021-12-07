@@ -1,4 +1,5 @@
 import logging
+import random
 import numpy as np
 from numba import jit
 from .. import links
@@ -76,7 +77,7 @@ class Exact(Explainer):
             self._gray_code_cache[n] = gray_code_indexes(n)
         return self._gray_code_cache[n]
 
-    def explain_row(self, *row_args, max_evals, main_effects, error_bounds, batch_size, outputs, interactions, silent):
+    def explain_row(self, *row_args, iter, max_evals, main_effects, error_bounds, batch_size, outputs, interactions, silent):
         """ Explains a single row and returns the tuple (row_values, row_expected_values, row_mask_shapes).
         """
 
@@ -110,11 +111,9 @@ class Exact(Explainer):
                     extended_delta_indexes[i] = inds[delta_indexes[i]]
 
             # run the model
-            outputs = fm(extended_delta_indexes, zero_index=0, batch_size=batch_size)
-
+            outputs = fm(extended_delta_indexes, iter, zero_index=0, batch_size=batch_size)
             # Shapley values
             if interactions is False or interactions is 1: # pylint: disable=literal-comparison
-
                 # loop over all the outputs to update the rows
                 coeff = shapley_coefficients(len(inds))
                 row_values = np.zeros((len(fm),) + outputs.shape[1:])
@@ -162,11 +161,10 @@ class Exact(Explainer):
         if main_effects or interactions is True or interactions is 2: # pylint: disable=literal-comparison
             if inds is None:
                 inds = np.arange(len(fm))
-            main_effect_values = fm.main_effects(inds)
+            main_effect_values = fm.main_effects(inds, iter)
             if interactions is True or interactions is 2:
                 for i in range(len(fm)):
                     row_values[i, i] = main_effect_values[i]
-
         return {
             "values": row_values,
             "expected_values": outputs[0],
