@@ -188,7 +188,6 @@ class MaskedModel():
 
     def _delta_masking_call(self, masks, iter_mc, zero_index=None, batch_size=None):
         # TODO: we need to do batching here
-        print(iter_mc)
         random.seed(iter_mc[0])
         assert getattr(self.masker, "supports_delta_masking", None) is not None, "Masker must support delta masking!"
 
