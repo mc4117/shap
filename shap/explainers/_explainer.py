@@ -2,7 +2,6 @@ import copy
 import time
 import numpy as np
 import scipy as sp
-import random
 from .. import maskers
 from .. import links
 from ..utils import safe_isinstance, show_progress
