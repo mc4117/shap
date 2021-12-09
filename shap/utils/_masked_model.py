@@ -1,5 +1,5 @@
 import copy
-import random
+import tensorflow as tf
 import numpy as np
 import scipy.sparse
 from numba import jit
@@ -188,7 +188,7 @@ class MaskedModel():
 
     def _delta_masking_call(self, masks, iter_mc, zero_index=None, batch_size=None):
         # TODO: we need to do batching here
-        random.seed(iter_mc[0])
+        tf.random.set_seed(iter_mc[0])
         assert getattr(self.masker, "supports_delta_masking", None) is not None, "Masker must support delta masking!"
 
         masked_inputs, varying_rows = self.masker(masks, *self.args)
