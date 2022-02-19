@@ -146,7 +146,7 @@ class Exact(Explainer):
             delta_indexes = self._partition_delta_indexes
 
             # run the model
-            outputs = fm(delta_indexes, batch_size=batch_size)
+            outputs = fm(delta_indexes, iter, batch_size=batch_size)
 
             # loop over each output feature
             row_values = np.zeros((len(fm),) + outputs.shape[1:])

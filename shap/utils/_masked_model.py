@@ -59,16 +59,16 @@ class MaskedModel():
 
             # we need to convert from delta masking to a full masking call because we were given a delta masking
             # input but the masker does not support delta masking
-            else: 
+            else:
                 full_masks = np.zeros((int(np.sum(masks >= 0)), self._masker_cols), dtype=np.bool)
                 _convert_delta_mask_to_full(masks, full_masks)
-                return self._full_masking_call(full_masks, zero_index=zero_index, batch_size=batch_size)
+                return self._full_masking_call(full_masks, iter, zero_index=zero_index, batch_size=batch_size)
 
         else:
-            return self._full_masking_call(masks, batch_size=batch_size)
+            return self._full_masking_call(masks, iter, batch_size=batch_size)
 
-    def _full_masking_call(self, masks, zero_index=None, batch_size=None):
-
+    def _full_masking_call(self, masks, iter, zero_index=None, batch_size=None):
+        tf.random.set_seed(iter_mc[0])
         if batch_size is None:
             batch_size = len(masks)
         do_delta_masking = getattr(self.masker, "reset_delta_masking", None) is not None
