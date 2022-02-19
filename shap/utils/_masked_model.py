@@ -67,7 +67,7 @@ class MaskedModel():
         else:
             return self._full_masking_call(masks, iter, batch_size=batch_size)
 
-    def _full_masking_call(self, masks, iter, zero_index=None, batch_size=None):
+    def _full_masking_call(self, masks, iter_mc, zero_index=None, batch_size=None):
         tf.random.set_seed(iter_mc[0])
         if batch_size is None:
             batch_size = len(masks)
