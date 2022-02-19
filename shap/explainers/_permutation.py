@@ -81,7 +81,7 @@ class Permutation(Explainer):
         """
 
         # build a masked version of the model for the current input sample
-        fm = MaskedModel(self.model, self.masker, self.link, self.linearize_link, iter, *row_args)
+        fm = MaskedModel(self.model, self.masker, self.link, self.linearize_link, *row_args)
 
         # by default we run 10 permutations forward and backward
         if max_evals == "auto":
@@ -129,7 +129,7 @@ class Permutation(Explainer):
                     i += 1
 
                 # evaluate the masked model
-                outputs = fm(masks, zero_index=0, batch_size=batch_size, iter=iter)
+                outputs = fm(masks, iter=iter, zero_index=0, batch_size=batch_size)
 
                 if row_values is None:
                     row_values = np.zeros((len(fm),) + outputs.shape[1:])
