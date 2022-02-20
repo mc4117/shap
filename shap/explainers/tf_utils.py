@@ -60,6 +60,7 @@ def _get_model_inputs(model):
     if str(type(model)).endswith("keras.engine.sequential.Sequential'>") or \
         str(type(model)).endswith("keras.models.Sequential'>") or \
         str(type(model)).endswith("keras.engine.training.Model'>") or \
+        str(model).endswith("f_model'>") or \
         isinstance(model, tf.keras.Model):
         return model.inputs
     elif str(type(model)).endswith("tuple'>"):
@@ -80,6 +81,7 @@ def _get_model_output(model):
     if str(type(model)).endswith("keras.engine.sequential.Sequential'>") or \
         str(type(model)).endswith("keras.models.Sequential'>") or \
         str(type(model)).endswith("keras.engine.training.Model'>") or \
+        str(model).endswith("f_model'>") or \
         isinstance(model, tf.keras.Model):
         if len(model.layers[-1]._inbound_nodes) == 0:
             if len(model.outputs) > 1:
