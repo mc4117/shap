@@ -158,7 +158,7 @@ class Partition(Explainer):
         # if not fixed background or no base value assigned then compute base value for a row
         if self._curr_base_value is None or not getattr(self.masker, "fixed_background", False):
             self._curr_base_value = fm(m00.reshape(1, -1), iter, zero_index=0)[0] # the zero index param tells the masked model what the baseline is
-        f11 = fm(~m00.reshape(1, -1))[0]
+        f11 = fm(~m00.reshape(1, -1), iter)[0]
 
         if callable(self.masker.clustering):
             self._clustering = self.masker.clustering(*row_args)
