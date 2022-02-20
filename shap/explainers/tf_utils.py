@@ -90,7 +90,7 @@ def _get_model_output(model):
     #        return model.outputs[0]
     #    else:
     print(model)
-    return model.layers[-1].output
+    return model.outputs #layers[-1].output
     #elif str(type(model)).endswith("tuple'>"):
     #    return model[1]
     #else:
