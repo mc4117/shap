@@ -305,7 +305,7 @@ class Partition(Explainer):
 
             # run the batch
             if len(batch_args) > 0:
-                fout = fm(batch_masks)
+                fout = fm(batch_masks, iter)
                 if output_indexes is not None:
                     fout = fout[:,output_indexes]
 
@@ -444,7 +444,7 @@ class Partition(Explainer):
 
             # run the batch
             if len(batch_args) > 0:
-                fout = fm(batch_masks)
+                fout = fm(batch_masks, iter)
                 if output_indexes is not None:
                     fout = fout[:,output_indexes]
 
