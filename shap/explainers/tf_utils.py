@@ -57,16 +57,17 @@ def _get_model_inputs(model):
         The tensorflow model or tuple.
     """
     _import_tf()
-    if str(type(model)).endswith("keras.engine.sequential.Sequential'>") or \
-        str(type(model)).endswith("keras.models.Sequential'>") or \
-        str(type(model)).endswith("keras.engine.training.Model'>") or \
-        str(model).endswith("f_model'>") or \
-        isinstance(model, tf.keras.Model):
-        return model.inputs
-    elif str(type(model)).endswith("tuple'>"):
-        return model[0]
-    else:
-        assert False, str(type(model)) + " is not currently a supported model type!"
+    #if str(type(model)).endswith("keras.engine.sequential.Sequential'>") or \
+    #    str(type(model)).endswith("keras.models.Sequential'>") or \
+    #    str(type(model)).endswith("keras.engine.training.Model'>") or \
+    #    str(model).endswith("f_model'>") or \
+    #    isinstance(model, tf.keras.Model):
+    print(model)
+    return model.inputs
+    #elif str(type(model)).endswith("tuple'>"):
+    #    return model[0]
+    #else:
+    #    assert False, str(type(model)) + " is not currently a supported model type!"
 
 def _get_model_output(model):
     """ Common utility to determine the model output.
@@ -78,18 +79,19 @@ def _get_model_output(model):
         The tensorflow model or tuple.
     """
     _import_tf()
-    if str(type(model)).endswith("keras.engine.sequential.Sequential'>") or \
-        str(type(model)).endswith("keras.models.Sequential'>") or \
-        str(type(model)).endswith("keras.engine.training.Model'>") or \
-        str(model).endswith("f_model'>") or \
-        isinstance(model, tf.keras.Model):
-        if len(model.layers[-1]._inbound_nodes) == 0:
-            if len(model.outputs) > 1:
-                warnings.warn("Only one model output supported.")
-            return model.outputs[0]
-        else:
-            return model.layers[-1].output
-    elif str(type(model)).endswith("tuple'>"):
-        return model[1]
-    else:
-        assert False, str(type(model)) + " is not currently a supported model type!"
+    #if str(type(model)).endswith("keras.engine.sequential.Sequential'>") or \
+    #    str(type(model)).endswith("keras.models.Sequential'>") or \
+    #    str(type(model)).endswith("keras.engine.training.Model'>") or \
+    #    str(model).endswith("f_model'>") or \
+    #    isinstance(model, tf.keras.Model):
+    #    if len(model.layers[-1]._inbound_nodes) == 0:
+    #        if len(model.outputs) > 1:
+    #            warnings.warn("Only one model output supported.")
+    #        return model.outputs[0]
+    #    else:
+    print(model)
+    return model.layers[-1].output
+    #elif str(type(model)).endswith("tuple'>"):
+    #    return model[1]
+    #else:
+    #    assert False, str(type(model)) + " is not currently a supported model type!"
