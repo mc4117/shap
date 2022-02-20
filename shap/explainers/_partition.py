@@ -180,7 +180,7 @@ class Partition(Explainer):
         self.values = np.zeros(out_shape)
         self.dvalues = np.zeros(out_shape)
 
-        self.owen(fm, self._curr_base_value, f11, max_evals - 2, outputs, fixed_context, batch_size, silent)
+        self.owen(fm, self._curr_base_value, f11, max_evals - 2, outputs, fixed_context, batch_size, silent, iter)
 
         # if False:
         #     if self.multi_output:
@@ -220,7 +220,7 @@ class Partition(Explainer):
     def __str__(self):
         return "shap.explainers.Partition()"
 
-    def owen(self, fm, f00, f11, max_evals, output_indexes, fixed_context, batch_size, silent):
+    def owen(self, fm, f00, f11, max_evals, output_indexes, fixed_context, batch_size, silent, iter):
         """ Compute a nested set of recursive Owen values based on an ordering recursion.
         """
 
